@@ -107,3 +107,4 @@ const api = axios.create({
 - Vite com suporte rápido a hot reload
 - Arquitetura simples e funcional
 - Utilização de componentes reutilizáveis
+- Repositorio Back : https://github.com/Brabodopedro/Projeto-ToDo-back
