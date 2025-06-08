@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import styles from './Account.module.css';
 
 export default function AccountPage() {
   const [user, setUser] = useState(null);
@@ -25,7 +26,7 @@ export default function AccountPage() {
   if (!user) return <p>Carregando dados da conta...</p>;
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div className={styles.container}>
       <h2>Minha Conta</h2>
       <p><strong>Nome:</strong> {user.name}</p>
       <p><strong>Email:</strong> {user.email}</p>

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import styles from './Login.module.css';
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -28,10 +30,11 @@ export default function Login() {
   };
 
   return (
-    <div style={styles.container}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Login</h2>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <input
+          className={styles.input}
           type="email"
           name="email"
           placeholder="E-mail"
@@ -40,6 +43,7 @@ export default function Login() {
           required
         />
         <input
+          className={styles.input}
           type="password"
           name="password"
           placeholder="Senha"
@@ -47,29 +51,13 @@ export default function Login() {
           onChange={handleChange}
           required
         />
-        {error && <p style={styles.error}>{error}</p>}
-        <button type="submit">Entrar</button>
+        {error && <p className={styles.error}>{error}</p>}
+        <button type="submit" className={styles.button}>Entrar</button>
       </form>
-      <p>
+      <p className={styles.link}>
         Não tem uma conta? <a href="/register">Cadastre-se</a>
       </p>
     </div>
   );
-}
 
-const styles = {
-  container: {
-    maxWidth: 400,
-    margin: '100px auto',
-    textAlign: 'center',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 12,
-  },
-  error: {
-    color: 'red',
-    fontSize: 14,
-  },
-};
+}

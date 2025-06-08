@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import styles from './TaskForm.module.css'; // <- novo CSS module
 
 interface Props {
   onTaskCreated: () => void;
@@ -32,15 +33,31 @@ export default function TaskForm({ onTaskCreated, onCancel }: Props) {
         }
       );
 
-      onTaskCreated(); // Atualiza a lista
+      // ✅ limpa os campos
+      setTitle("");
+      setDescription("");
+      setDueDate("");
+      setStatus("pendente");
+
+      onTaskCreated(); // ✅ atualiza a lista e fecha o form
     } catch (err) {
       console.error("Erro ao criar tarefa:", err);
     }
   };
 
+  const handleCancel = () => {
+    // ✅ também limpa os campos ao cancelar
+    setTitle("");
+    setDescription("");
+    setDueDate("");
+    setStatus("pendente");
+    onCancel();
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={styles.form}>
       <h3>Nova Tarefa</h3>
+
       <input
         type="text"
         placeholder="Título"
@@ -64,8 +81,13 @@ export default function TaskForm({ onTaskCreated, onCancel }: Props) {
         <option value="concluída">Concluída</option>
         <option value="cancelada">Cancelada</option>
       </select>
-      <button type="submit">Salvar</button>
-      <button type="button" onClick={onCancel}>Cancelar</button>
+
+      <div className={styles.buttons}>
+        <button type="submit">Salvar</button>
+        <button type="button" onClick={handleCancel} className={styles.cancel}>
+          Cancelar
+        </button>
+      </div>
     </form>
   );
 }
