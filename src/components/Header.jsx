@@ -6,6 +6,11 @@ export default function Header() {
 
   const isHome = location.pathname === "/";
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
@@ -14,7 +19,7 @@ export default function Header() {
           <>
             <Link to="/dashboard" className={styles.link}>Dashboard</Link>
             <Link to="/account" className={styles.link}>Minha Conta</Link>
-            <Link to="/login" className={styles.link}>Logout</Link>
+            <Link to="/login" className={styles.link} onClick={handleLogout} >Logout</Link>
           </>
         )}
       </nav>
