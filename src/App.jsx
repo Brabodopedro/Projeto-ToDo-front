@@ -3,6 +3,9 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/Login";
 import TaskList from "./components/TaskList";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Navbar from "./components/Navbar";
+import AccountPage from "./pages/AccountPage";
+
 
 export default function App() {
   return (
@@ -14,11 +17,25 @@ export default function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <TaskList />
+              <>
+                <Navbar />
+                <TaskList />
+              </>
             </ProtectedRoute>
           }
         />
-      </Routes>
+      <Route
+        path="/conta"
+        element={
+          <ProtectedRoute>
+            <>
+              <Navbar />
+              <AccountPage />
+            </>
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
     </BrowserRouter>
   );
 }
