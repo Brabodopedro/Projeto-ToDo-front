@@ -1,62 +1,67 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import styles from './TaskForm.module.css'; // <- novo CSS module
 
-interface Props {
-  onTaskCreated: () => void;
-  onCancel: () => void;
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  due_date: string;
+  status: string;
 }
 
-export default function TaskForm({ onTaskCreated, onCancel }: Props) {
+interface Props {
+  onSave: () => void;
+  onClose: () => void;
+  editingTask?: Task | null;
+  inline?: boolean; // define se será embutido na tabela ou não
+}
+
+export default function TaskForm({ onSave, onClose, editingTask = null, inline = false }: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [status, setStatus] = useState("pendente");
 
+  // Preencher dados caso esteja editando
+  useEffect(() => {
+    if (editingTask) {
+      setTitle(editingTask.title);
+      setDescription(editingTask.description);
+      setDueDate(editingTask.due_date);
+      setStatus(editingTask.status);
+    }
+  }, [editingTask]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
 
     try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        "http://localhost:8000/api/tasks",
-        {
-          title,
-          description,
-          due_date: dueDate,
-          status,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      if (editingTask) {
+        // Atualização
+        await axios.put(
+          `http://localhost:8000/api/tasks/${editingTask.id}`,
+          { title, description, due_date: dueDate, status },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else {
+        // Criação
+        await axios.post(
+          "http://localhost:8000/api/tasks",
+          { title, description, due_date: dueDate, status },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
 
-      // ✅ limpa os campos
-      setTitle("");
-      setDescription("");
-      setDueDate("");
-      setStatus("pendente");
-
-      onTaskCreated(); // ✅ atualiza a lista e fecha o form
+      onSave();
     } catch (err) {
-      console.error("Erro ao criar tarefa:", err);
+      console.error("Erro ao salvar tarefa:", err);
     }
   };
 
-  const handleCancel = () => {
-    // ✅ também limpa os campos ao cancelar
-    setTitle("");
-    setDescription("");
-    setDueDate("");
-    setStatus("pendente");
-    onCancel();
-  };
-
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <h3>Nova Tarefa</h3>
+    <form onSubmit={handleSubmit} style={{ marginTop: inline ? 0 : "1rem" }}>
+      {!inline && <h3>{editingTask ? "Editar Tarefa" : "Nova Tarefa"}</h3>}
 
       <input
         type="text"
@@ -82,12 +87,8 @@ export default function TaskForm({ onTaskCreated, onCancel }: Props) {
         <option value="cancelada">Cancelada</option>
       </select>
 
-      <div className={styles.buttons}>
-        <button type="submit">Salvar</button>
-        <button type="button" onClick={handleCancel} className={styles.cancel}>
-          Cancelar
-        </button>
-      </div>
+      <button type="submit">Salvar</button>
+      <button type="button" onClick={onClose}>Cancelar</button>
     </form>
   );
 }

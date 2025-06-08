@@ -30,4 +30,5 @@ input, button {
 
 * {
   box-sizing: border-box;
+  margin-right: 6px;
 }

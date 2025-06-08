@@ -33,10 +33,15 @@ export default function TaskList() {
 
   // Editar tarefa
   const handleEdit = (task: Task) => {
-    setEditingTask(task);
-    setShowForm(true);
+    if (editingTask?.id === task.id) {
+      // Se já estiver editando essa mesma tarefa, fecha o form
+      setEditingTask(null);
+    } else {
+      // Abre edição para a tarefa clicada
+      setEditingTask(task);
+      setShowForm(false); // garante que o form de criação esteja fechado
+    }
   };
-
   // Excluir tarefa
   const handleDelete = async (id: number) => {
     try {
@@ -53,9 +58,10 @@ export default function TaskList() {
   };
 
   const toggleForm = () => {
-    setEditingTask(null);
-    setShowForm((prev) => !prev);
+    setEditingTask(null);  // limpa edição
+    setShowForm(prev => !prev);
   };
+
 
   // Fechar formulário
   const handleCloseForm = () => {
@@ -77,13 +83,13 @@ export default function TaskList() {
   return (
     <div className={styles.container}>
       <h2>Minhas Tarefas</h2>
-      <button onClick={toggleForm} className={styles.edit}>+ Nova Tarefa</button>
-
-      {showForm && (
+      {!editingTask && (
+        <button onClick={toggleForm} className={styles.edit}>+ Nova Tarefa</button>
+      )}
+      {showForm && !editingTask && (
         <TaskForm
-          onClose={handleCloseForm}
           onSave={handleSaveTask}
-          editingTask={editingTask}
+          onClose={handleCloseForm}
         />
       )}
 
@@ -99,18 +105,34 @@ export default function TaskList() {
         </thead>
         <tbody>
           {tasks.map((task) => (
-            <tr key={task.id}>
-              <td>{task.title}</td>
-              <td>{task.description}</td>
-              <td>{task.status}</td>
-              <td>{new Date(task.due_date).toLocaleDateString()}</td>
-              <td>
-                <button className={styles.edit} onClick={() => handleEdit(task)}>Editar</button>
-                <button className={styles.delete} onClick={() => handleDelete(task.id)}>Excluir</button>
-              </td>
-            </tr>
+            <>
+              <tr>
+                <td>{task.title}</td>
+                <td>{task.description}</td>
+                <td>{task.status}</td>
+                <td>{new Date(task.due_date).toLocaleDateString()}</td>
+                <td>
+                  <button className={styles.edit} onClick={() => handleEdit(task)}>Editar</button>
+                  <button className={styles.delete} onClick={() => handleDelete(task.id)}>Excluir</button>
+                </td>
+              </tr>
+
+              {editingTask?.id === task.id && (
+                <tr>
+                  <td colSpan={5}>
+                    <TaskForm
+                      onSave={handleSaveTask}
+                      onClose={handleCloseForm}
+                      editingTask={editingTask}
+                      inline
+                    />
+                  </td>
+                </tr>
+              )}
+            </>
           ))}
         </tbody>
+
       </table>
     </div>
   );

@@ -24,10 +24,12 @@ input {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-right: 6px;
 }
 
 button {
-  padding: 12px;
+  padding: 8px;
+  margin-right: 6px;
   background-color: #1976d2;
   color: white;
   border: none;
