@@ -1,110 +1,52 @@
-# Task Manager Frontend (React + Vite)
+# Projeto ToDo - Frontend (React)
 
-Frontend para o sistema de tarefas com autenticação JWT e consumo da API Laravel.
+Este repositório contém a interface web do sistema de tarefas, feita com React, Vite e autenticação via JWT.
 
-## 🚀 Tecnologias
+---
 
-- React 18 + Vite
+## ⚙️ Tecnologias
+
+- React + TypeScript
+- Vite
+- CSS Modules
 - React Router DOM
+- JWT
 - Axios
-- JWT (localStorage)
-- Validações manuais
-- Consumo dinâmico da API
+- Docker
 
 ---
 
-## 📁 Estrutura
+## 🚀 COMO RODAR JUNTO COM O BACKEND
 
+> ⚠️ O `docker-compose.yml` está no repositório `Projeto-ToDo-back`, e ele já configura o container do front.
+
+1. Clone **este repositório** como `Projeto-ToDo-front` e o repositório do back-end(`https://github.com/Brabodopedro/Projeto-ToDo-back`) lado a lado na mesma estrutura:
 ```
-src/
-├── components/
-│   ├── ProtectedRoute.jsx
-│   └── TaskCard.jsx
-├── pages/
-│   ├── LoginPage.jsx
-│   └── TaskList.jsx
-├── services/
-│   └── api.js
-├── App.jsx
-├── main.jsx
-└── utils/
-    └── auth.js
+alguma-pasta/
+├── Projeto-ToDo-back/
+├── Projeto-ToDo-front/    <- Este repositório
 ```
 
----
-
-## 🧠 Funcionalidades
-
-- Tela de login com validação
-- Armazenamento de token JWT
-- Rotas protegidas (`ProtectedRoute`)
-- Listagem de tarefas do usuário
-- Criação de nova tarefa (formulário)
-- Redirecionamento após login
-- Logout automático com expiração
-
----
-
-## 🔐 Autenticação
-
-- Login salva o token no `localStorage`
-- Todas as requisições autenticadas usam:
-
-```js
-headers: {
-  Authorization: `Bearer ${token}`
-}
-```
-
-- O token é verificado em `ProtectedRoute.jsx`
-
----
-
-## 📌 Páginas
-
-- `/login` — Tela de login
-- `/` — Página principal com listagem de tarefas
-
----
-
-## 🔁 Requisições
-
-| Método | Endpoint       | Descrição                  |
-|--------|----------------|----------------------------|
-| POST   | `/api/login`   | Login do usuário           |
-| GET    | `/api/tasks`   | Listar tarefas             |
-| POST   | `/api/tasks`   | Criar nova tarefa          |
-| PUT    | `/api/tasks/id`| Atualizar tarefa existente |
-| DELETE | `/api/tasks/id`| Excluir tarefa             |
-
----
-
-## ▶️ Executar o projeto
+2. Vá para a pasta `Projeto-ToDo-back` e rode:
 
 ```bash
-git clone https://github.com/seu-usuario/task-manager-frontend.git
-cd task-manager-frontend
-npm install
-npm run dev
+docker compose up --build
 ```
+
+3. Acesse o frontend em: [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 🌐 Conexão com a API
+## 🔐 Integração com API
 
-Arquivo: `src/services/api.js`
-
-```js
-const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
-});
-```
+- API Base: `http://localhost:8000/api`
+- Token JWT via `Authorization: Bearer <TOKEN>`
 
 ---
 
-## 📌 Observações
+## ✅ Funcionalidades
 
-- Vite com suporte rápido a hot reload
-- Arquitetura simples e funcional
-- Utilização de componentes reutilizáveis
-- Repositorio Back : https://github.com/Brabodopedro/Projeto-ToDo-back
+- Login com JWT
+- Listagem de tarefas
+- Criação, edição, exclusão inline
+- Logout e navegação protegida
