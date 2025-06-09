@@ -4,7 +4,7 @@ Este repositório contém a interface web do sistema de tarefas, feita com React
 
 ---
 
-## ⚙️ Tecnologias
+## ⚙️ Tecnologias e Ferramentas
 
 - React + TypeScript
 - Vite
@@ -12,41 +12,71 @@ Este repositório contém a interface web do sistema de tarefas, feita com React
 - React Router DOM
 - JWT
 - Axios
-- Docker
+- Docker + Nginx
 
 ---
 
-## 🚀 COMO RODAR JUNTO COM O BACKEND
+## 🚀 Como Rodar com Docker
 
-> ⚠️ O `docker-compose.yml` está no repositório `Projeto-ToDo-back`, e ele já configura o container do front.
-
-1. Clone **este repositório** como `Projeto-ToDo-front` e o repositório do back-end(`https://github.com/Brabodopedro/Projeto-ToDo-back`) lado a lado na mesma estrutura:
-```
-alguma-pasta/
-├── Projeto-ToDo-back/
-├── Projeto-ToDo-front/    <- Este repositório
-```
-
-2. Vá para a pasta `Projeto-ToDo-back` e rode:
+1. Clone este repositório e o `Projeto-ToDo-back`.
+2. Vá até a raiz com `docker-compose.yml`.
+3. Execute:
 
 ```bash
 docker compose up --build
 ```
 
-3. Acesse o frontend em: [http://localhost:3000](http://localhost:3000)
+4. Acesse o front-end em:  
+```
+http://localhost:3000
+```
 
 ---
 
-## 🔐 Integração com API
+## 🧭 Rotas da Aplicação
 
-- API Base: `http://localhost:8000/api`
-- Token JWT via `Authorization: Bearer <TOKEN>`
+| Rota           | Protegida | Descrição                |
+|----------------|-----------|--------------------------|
+| `/`            | ❌         | Página pública (Home)    |
+| `/login`       | ❌         | Tela de login            |
+| `/dashboard`   | ✅         | Lista e edição de tarefas|
+| `/account`     | ✅         | Página da conta/logado   |
+
+---
+
+## 🎨 Layout
+
+- Menu superior nas páginas protegidas (`/dashboard`, `/account`)
+- Responsivo e com UX simples
+- Proteção de rotas com componente `ProtectedRoute`
 
 ---
 
 ## ✅ Funcionalidades
 
-- Login com JWT
-- Listagem de tarefas
-- Criação, edição, exclusão inline
-- Logout e navegação protegida
+- Autenticação com JWT
+- Formulário de login com validação
+- Listagem de tarefas do usuário autenticado
+- Criação e edição inline
+- Logout
+
+---
+
+## 🔐 Integração com a API
+
+As chamadas são feitas para:  
+```
+http://localhost:8000/api
+```
+
+Requer header:
+
+```
+Authorization: Bearer <TOKEN>
+```
+
+---
+
+## 📄 Licença
+
+MIT
