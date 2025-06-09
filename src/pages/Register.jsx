@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api from "../services/api"; // ✅ Usa instância com baseURL correta
 import styles from "./Register.module.css";
 
 export default function Register() {
@@ -27,11 +27,23 @@ export default function Register() {
     }
 
     try {
-      await api.post("/register", form);
+      // ✅ Chamada correta para API Laravel
+      await api.post("/register", {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        password_confirmation: form.password_confirmation,
+      });
+
+      // ✅ Redireciona para login após sucesso
       navigate("/login");
     } catch (err) {
-      console.error(err);
-      setError("Erro ao cadastrar. Verifique os dados.");
+      console.error("Erro no registro:", err);
+      if (err.response?.status === 422) {
+        setError("Dados inválidos ou e-mail já cadastrado.");
+      } else {
+        setError("Erro ao cadastrar. Verifique os dados.");
+      }
     }
   };
 
